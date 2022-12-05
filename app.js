@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 const userRoute = require("./router/user");
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
 
 app.use("/user", userRoute);
