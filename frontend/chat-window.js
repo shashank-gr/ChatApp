@@ -1,8 +1,8 @@
 const sendBtn = document.querySelector("#btn-send-msg");
 const chatMessages = document.querySelector("#chat-messages");
+const textBox = document.querySelector("#input-msgbox");
 const toast = document.querySelector(".toast-msg");
-axios.defaults.headers.post["Authorization"] =
-  localStorage.getItem("userToken");
+axios.defaults.headers["Authorization"] = localStorage.getItem("userToken");
 
 const createToast = (msg, color = "orangered") => {
   // console.log("toast creted");
@@ -19,8 +19,13 @@ const createToast = (msg, color = "orangered") => {
   }, 5000);
 };
 
+const addToChatCard = (name, text) => {
+  const html = `<li class="list-group-item">${name}: ${text}</li>`;
+  chatMessages.insertAdjacentHTML("beforeend", html);
+  textBox.value = "";
+};
+
 const sendMsg = async (e) => {
-  const textBox = document.querySelector("#input-msgbox");
   const text = textBox.value;
   if (!text) return createToast("Enter Message to be sent");
   try {
@@ -33,9 +38,7 @@ const sendMsg = async (e) => {
     );
     // console.log(respone);
     if (response.status == 200) {
-      const html = `<li class="list-group-item">${response.data.userName}: ${text}</li>`;
-      chatMessages.insertAdjacentHTML("beforeend", html);
-      textBox.value = "";
+      addToChatCard(response.data.userName, text);
       createToast(response.data.msg, "green");
     }
   } catch (error) {
@@ -48,4 +51,22 @@ const sendMsg = async (e) => {
   }
 };
 
+const onPageLoaded = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/chat/allchats");
+    if (response.status == 200) {
+      const chats = response.data.chats;
+      chats.forEach((chat) => {
+        addToChatCard(response.data.userName, chat.chatMessage);
+      });
+      createToast(response.data.msg, "green");
+    }
+  } catch (error) {
+    console.log(error);
+    if (error.response.status == 400) {
+      createToast(error.response.data.msg);
+    }
+  }
+};
 sendBtn.addEventListener("click", sendMsg);
+document.addEventListener("DOMContentLoaded", onPageLoaded);

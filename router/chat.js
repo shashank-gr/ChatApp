@@ -1,12 +1,17 @@
 const { Router } = require("express");
 const router = Router();
 const autenticate = require("../middleware/autenticate");
-const userController = require("../controllers/chat");
+const chatController = require("../controllers/chat");
 
 router.post(
   "/chatMessage",
   autenticate.authenticateToken,
-  userController.postChatMessage
+  chatController.postChatMessage
+);
+router.get(
+  "/allchats",
+  autenticate.authenticateToken,
+  chatController.getAllChats
 );
 
 module.exports = router;
