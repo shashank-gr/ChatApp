@@ -22,7 +22,7 @@ const createToast = (msg, color = "orangered") => {
 
 const registerUser = async (e) => {
   e.preventDefault();
-  console.log(userName.value, phone.value, email.value, password.value);
+  // console.log(userName.value, phone.value, email.value, password.value);
   try {
     const data = {
       name: userName.value,
