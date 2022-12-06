@@ -29,6 +29,7 @@ const loginUser = async (e) => {
     const response = await axios.post("http://localhost:3000/user/login", data);
     console.log(response.data);
     localStorage.setItem("userToken", response.data.token);
+    window.location.href = "./chat-window.html";
   } catch (error) {
     console.log(error);
     if (error.response.status == 400) {
