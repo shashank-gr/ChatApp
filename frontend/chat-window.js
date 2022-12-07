@@ -4,8 +4,8 @@ const textBox = document.querySelector("#input-msgbox");
 const toast = document.querySelector(".toast-msg");
 axios.defaults.headers["Authorization"] = localStorage.getItem("userToken");
 
+//to create toast messages
 const createToast = (msg, color = "orangered") => {
-  // console.log("toast creted");
   const div = document.createElement("div");
   div.innerHTML = msg;
   div.style.backgroundColor = color;
@@ -14,17 +14,17 @@ const createToast = (msg, color = "orangered") => {
   div.style.color = "#fff";
   toast.insertAdjacentElement("beforeend", div);
   setTimeout(() => {
-    // console.log("toast removed");
     div.remove();
-  }, 5000);
+  }, 2000);
 };
 
+//to add the message to the cart
 const addToChatCard = (name, text) => {
   const html = `<li class="list-group-item">${name}: ${text}</li>`;
   chatMessages.insertAdjacentHTML("beforeend", html);
-  textBox.value = "";
 };
 
+//to send a single message
 const sendMsg = async (e) => {
   const text = textBox.value;
   if (!text) return createToast("Enter Message to be sent");
@@ -36,9 +36,9 @@ const sendMsg = async (e) => {
       "http://localhost:3000/chat/chatmessage",
       data
     );
-    // console.log(respone);
     if (response.status == 200) {
       addToChatCard(response.data.userName, text);
+      textBox.value = "";
       createToast(response.data.msg, "green");
     }
   } catch (error) {
@@ -51,22 +51,32 @@ const sendMsg = async (e) => {
   }
 };
 
-const onPageLoaded = async () => {
+//to get all the chats
+const getChats = async () => {
   try {
+    chatMessages.innerHTML = "";
     const response = await axios.get("http://localhost:3000/chat/allchats");
     if (response.status == 200) {
       const chats = response.data.chats;
       chats.forEach((chat) => {
         addToChatCard(response.data.userName, chat.chatMessage);
       });
-      createToast(response.data.msg, "green");
+      // createToast(response.data.msg, "green");
     }
   } catch (error) {
     console.log(error);
     if (error.response.status == 400) {
       createToast(error.response.data.msg);
+    } else if (error.response.status == 401) {
+      createToast(error.response.data.msg);
     }
   }
+};
+//refresh after every 3 seconds
+const onPageLoaded = () => {
+  setInterval(() => {
+    getChats();
+  }, 3000);
 };
 sendBtn.addEventListener("click", sendMsg);
 document.addEventListener("DOMContentLoaded", onPageLoaded);
