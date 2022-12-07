@@ -9,9 +9,14 @@ router.post(
   chatController.postChatMessage
 );
 router.get(
-  "/allchats",
+  "/allchats/:withUserId",
   autenticate.authenticateToken,
   chatController.getAllChats
+);
+router.get(
+  "/allusers",
+  autenticate.authenticateToken,
+  chatController.getAllUser
 );
 
 module.exports = router;
