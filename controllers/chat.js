@@ -16,6 +16,7 @@ exports.getAllUser = async (req, res) => {
 };
 exports.getAllChats = async (req, res) => {
   const chatPersonId = +req.params.withUserId;
+  if (chatPersonId == 0) return res.status(200).send({ msg: "success" });
   try {
     // const respone = await req.user.getChats({
     //   where: { toUser: chatPersonId },

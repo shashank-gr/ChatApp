@@ -6,6 +6,8 @@ const textBox = document.querySelector("#input-msgbox");
 const toast = document.querySelector(".toast-msg");
 axios.defaults.headers["Authorization"] = localStorage.getItem("userToken");
 
+let toUserId;
+
 //to create toast messages
 const createToast = (msg, color = "orangered") => {
   const div = document.createElement("div");
@@ -25,6 +27,7 @@ const onUserClick = (e) => {
     //  console.log(e.target.children);
     const name = e.target.textContent;
     const id = +e.target.children[0].value;
+    toUserId = id;
     // console.log(name, id);
     const html = `Message to : ${name} <input type='hidden' id='msg-header-user-id' value='${id}'/>`;
     messageHeader.innerHTML = html;
@@ -78,7 +81,7 @@ const getChats = async (toUserId = 0) => {
       `http://localhost:3000/chat/allchats/${toUserId}`
     );
     // console.log(response);
-    if (response.status == 200) {
+    if (response.status == 200 && response.data.chats) {
       const chats = response.data.chats;
 
       chats.forEach((chat) => {
@@ -113,13 +116,12 @@ const getUsers = async () => {
     console.log(error);
   }
 };
-//refresh after every 3 seconds
+//refresh after every 5 seconds
 const onPageLoaded = () => {
-  // setInterval(() => {
-  //   getChats();
-  // }, 3000);
   getUsers();
-  // getChats();
+  setInterval(() => {
+    getChats(toUserId); //starting default will be 0
+  }, 5000);
 };
 
 document.addEventListener("DOMContentLoaded", onPageLoaded);
