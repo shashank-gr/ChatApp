@@ -3,6 +3,9 @@ const chatMessages = document.querySelector("#chat-messages");
 const messageHeader = document.querySelector("#message-card-header");
 const usersBox = document.querySelector("#users-list");
 const textBox = document.querySelector("#input-msgbox");
+const groupBtn = document.querySelector("#group-btn");
+const createGroupBtn = document.querySelector("#group-create-btn");
+
 const toast = document.querySelector(".toast-msg");
 axios.defaults.headers["Authorization"] = localStorage.getItem("userToken");
 
@@ -109,6 +112,7 @@ const getUsers = async () => {
     const response = await axios.get("http://localhost:3000/chat/allusers");
     // console.log(response);
     const users = response.data.users;
+    localStorage.setItem("users", JSON.stringify(users));
     users.forEach((user) => {
       displayUser(user);
     });
@@ -116,14 +120,35 @@ const getUsers = async () => {
     console.log(error);
   }
 };
+const onCreateGroup = () => {
+  //nedd to make a popup
+};
+const onGroupBtnClick = () => {
+  window.location.href = "./group-window.html";
+  //   const html = ` <ul class="list-group list-group-flush" id="group-list">
+  //   <li class="list-group-item">user1</li>
+  //   <li class="list-group-item">user2</li>
+  //   <li class="list-group-item">user3</li>
+  // </ul>
+  // <button id='create-group'>Create Group</button>`;
+  //   cardHeader.insertAdjacentHTML("afterend", html);
+  //   document
+  //     .querySelector("#create-group")
+  //     .addEventListener("click", onCreateGroup);
+};
+const onCreateGroupBtnClick = () => {
+  window.location.href = "./creategroup-window.html";
+};
 //refresh after every 5 seconds
 const onPageLoaded = () => {
   getUsers();
-  setInterval(() => {
-    getChats(toUserId); //starting default will be 0
-  }, 5000);
+  // setInterval(() => {
+  //   getChats(toUserId); //starting default will be 0
+  // }, 5000);
 };
 
 document.addEventListener("DOMContentLoaded", onPageLoaded);
 sendBtn.addEventListener("click", sendMsg);
 usersBox.addEventListener("click", onUserClick);
+groupBtn.addEventListener("click", onGroupBtnClick);
+createGroupBtn.addEventListener("click", onCreateGroupBtnClick);
