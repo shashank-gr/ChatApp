@@ -35,7 +35,6 @@ exports.getAllUserGroups = async (req, res) => {
     const userGroups = await req.user.getGroups({
       attributes: ["id", "groupName"],
     });
-    // console.log(userGroups);
     res.status(200).send({ userGroups, msg: "success" });
   } catch (error) {
     console.log(error);
@@ -66,13 +65,15 @@ exports.postSendGroupMessage = async (req, res) => {
     const { groupMessage, groupId } = req.body;
     const userName = req.user.name;
     // console.log(userName, groupMessage, groupId);
+    if (!groupMessage || !groupId)
+      return res.status(400).send({ msg: "Bad Parameters" });
     const response = await Groupmessage.create({
       message: groupMessage,
       groupId: +groupId,
       userName,
     });
     console.log(response);
-    res.status(201).send({ msg: "Message sent successfully" });
+    res.status(201).send({ msg: "Group Message sent successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).send({ msg: "Internal Server Error" });
@@ -83,10 +84,10 @@ exports.postCreateGroup = async (req, res) => {
     const user = req.user;
     const { groupName } = req.body;
     await user.createGroup({ groupName }, { through: { admin: true } });
-    res.status(200).send("success");
+    res.status(201).send({ msg: "group created" });
   } catch (error) {
     console.log(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ msg: "Internal Server Error" });
   }
 };
 exports.postAddUser = async (req, res) => {
@@ -104,13 +105,13 @@ exports.postAddUser = async (req, res) => {
     });
     if (!userInUserGroup) {
       await Usergroup.create({ admin, userId: +user.id, groupId: +group.id });
-      return res.status(201).send({ msg: "Added to group" });
+      return res.status(201).send({ msg: "Added user to group" });
     }
     await Usergroup.update(
       { admin },
       { where: { userId: +user.id, groupId: +group.id } }
     );
-    return res.status(201).send({ msg: "Added to group" });
+    return res.status(201).send({ msg: "update user in the group" });
   } catch (error) {
     console.log(error);
     res.status(500).send({ msg: "Internal server error" });
@@ -131,7 +132,7 @@ exports.postDeleteUser = async (req, res) => {
         where: { userId: userToBeRemoved.id, groupId },
       });
       if (removeUser) {
-        return res.status(200).send({ msg: "success" });
+        return res.status(200).send({ msg: "success user removed" });
       }
       return res.status(400).send({ msg: "user is not present in group" });
     }

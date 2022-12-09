@@ -5,8 +5,8 @@ const usersBox = document.querySelector("#users-list");
 const textBox = document.querySelector("#input-msgbox");
 const groupBtn = document.querySelector("#group-btn");
 const createGroupBtn = document.querySelector("#group-create-btn");
-
 const toast = document.querySelector(".toast-msg");
+
 axios.defaults.headers["Authorization"] = localStorage.getItem("userToken");
 
 let toUserId;
