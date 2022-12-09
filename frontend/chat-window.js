@@ -112,7 +112,7 @@ const getUsers = async () => {
     const response = await axios.get("http://localhost:3000/chat/allusers");
     // console.log(response);
     const users = response.data.users;
-    localStorage.setItem("users", JSON.stringify(users));
+    // localStorage.setItem("users", JSON.stringify(users));
     users.forEach((user) => {
       displayUser(user);
     });
@@ -120,21 +120,9 @@ const getUsers = async () => {
     console.log(error);
   }
 };
-const onCreateGroup = () => {
-  //nedd to make a popup
-};
+
 const onGroupBtnClick = () => {
   window.location.href = "./group-window.html";
-  //   const html = ` <ul class="list-group list-group-flush" id="group-list">
-  //   <li class="list-group-item">user1</li>
-  //   <li class="list-group-item">user2</li>
-  //   <li class="list-group-item">user3</li>
-  // </ul>
-  // <button id='create-group'>Create Group</button>`;
-  //   cardHeader.insertAdjacentHTML("afterend", html);
-  //   document
-  //     .querySelector("#create-group")
-  //     .addEventListener("click", onCreateGroup);
 };
 const onCreateGroupBtnClick = () => {
   window.location.href = "./creategroup-window.html";
@@ -142,9 +130,9 @@ const onCreateGroupBtnClick = () => {
 //refresh after every 5 seconds
 const onPageLoaded = () => {
   getUsers();
-  // setInterval(() => {
-  //   getChats(toUserId); //starting default will be 0
-  // }, 5000);
+  setInterval(() => {
+    getChats(toUserId); //starting default will be 0
+  }, 5000);
 };
 
 document.addEventListener("DOMContentLoaded", onPageLoaded);

@@ -42,15 +42,15 @@
                 <div class="col-sm-6">
                   <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title text-center">Users</h5>
+                      <h5 class="card-title text-center">User's Email</h5>
                       <p class="card-text text-center">
                         List of Users in your contact
                       </p>
                       <hr />
                       <ul class="list-group list-group-flush" id="user-list">
-                        <li class="list-group-item">Group1</li>
+                        <!-- <li class="list-group-item">Group1</li>
                         <li class="list-group-item">Group2</li>
-                        <li class="list-group-item">Group3</li>
+                        <li class="list-group-item">Group3</li> -->
                       </ul>
                     </div>
                   </div>
@@ -64,9 +64,9 @@
                       </p>
                       <hr />
                       <ul class="list-group list-group-flush" id="group-list">
-                        <li class="list-group-item">Group1</li>
+                        <!-- <li class="list-group-item">Group1</li>
                         <li class="list-group-item">Group2</li>
-                        <li class="list-group-item">Group3</li>
+                        <li class="list-group-item">Group3</li> -->
                       </ul>
                     </div>
                   </div>
@@ -81,15 +81,16 @@
                 >
                   Group Configuration
                 </div>
-                <form>
+                <form onsubmit="createGroup(event)">
                   <h5>Create New Group</h5>
                   <div class="form-group my-1">
-                    <label for="groupname">GROUP NAME:</label>
+                    <label for="create-groupname">GROUP NAME:</label>
                     <input
                       type="text"
                       class="form-control form-control-sm"
-                      id="groupname"
+                      id="create-groupname"
                       placeholder="Enter New Group name"
+                      required
                     />
                   </div>
                   <button type="submit" class="btn btn-primary btn-sm">
@@ -97,21 +98,22 @@
                   </button>
                 </form>
                 <hr />
-                <form>
+                <form onsubmit="addUserToGroup(event)">
                   <h5>Add User to Group</h5>
                   <div class="form-group my-1">
-                    <label for="groupname">GROUP NAME:</label>
+                    <label for="create-groupname-user">GROUP NAME:</label>
                     <input
                       type="text"
                       class="form-control form-control-sm"
-                      id="groupname"
+                      id="create-groupname-user"
                       placeholder="Enter Group name"
+                      required
                     />
-                    <label for="email">EMAIL:</label>
+                    <label for="create-groupname-useremail">EMAIL:</label>
                     <input
                       type="email"
                       class="form-control"
-                      id="email"
+                      id="create-groupname-useremail"
                       placeholder="Enter Contact's email to add to group"
                     />
                     <div class="form-check form-check-inline">
@@ -131,6 +133,7 @@
                         type="radio"
                         name="admin"
                         id="admin-no"
+                        checked
                       />
                       <label class="form-check-label" for="admin-no"
                         >Not Admin</label
@@ -142,21 +145,22 @@
                   </button>
                 </form>
                 <hr />
-                <form>
+                <form onsubmit="removeFromGroup(event)">
                   <h5>Remove user from Group</h5>
                   <div class="form-group my-1">
-                    <label for="groupname">GROUP NAME:</label>
+                    <label for="remove-groupname">GROUP NAME:</label>
                     <input
                       type="text"
                       class="form-control"
-                      id="groupname"
+                      id="remove-groupname"
                       placeholder="Enter Group name"
+                      required
                     />
-                    <label for="email">EMAIL:</label>
+                    <label for="remove-email">EMAIL:</label>
                     <input
                       type="email"
                       class="form-control"
-                      id="email"
+                      id="remove-email"
                       placeholder="Enter Contact's email to add to group"
                     />
                   </div>
